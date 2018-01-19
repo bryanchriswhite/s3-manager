@@ -18,12 +18,12 @@
       dragstartY: null,
       hDivOffset: 0
     }),
-    mounted: function () {
+    mounted () {
       window.addEventListener('resize', () => this.handleResize());
       this.handleResize();
     },
     methods: {
-      handleResize: function () {
+      handleResize () {
         const top = this.$slots.top[0].elm
           , bottom = this.$slots.bottom[0].elm;
 
@@ -41,15 +41,12 @@
 //        const {offsetX, offsetY} = event;
 //        console.table({offsetX, offsetY})
 //      },
-      handleDragstart: function (event) {
+      handleDragstart (event) {
         event.dataTransfer.setData('text/plain', null);
         this.dragstartY = event.screenY;
-        console.log('dragstart screenY:', event.screenY);
       },
-      handleDragend: function (event) {
+      handleDragend (event) {
         this.hDivOffset = this.dragstartY - event.screenY;
-        console.log('dragend screenY:', event.screenY);
-        console.log('hDivOffset', this.hDivOffset);
         this.dragstartY = null;
 
         const top = this.$slots.top[0].elm
@@ -58,18 +55,18 @@
         this.incrementHeight(top, this.hDivOffset);
         this.decrementHeight(bottom, this.hDivOffset);
       },
-      parseValue: function (string) {
+      parseValue (string) {
         const valueRegex = /^[\d.]+/
           , valueMatch = string.match(valueRegex)
           , valueString = valueMatch && valueMatch[0];
 
         return parseInt(valueString, 10) || '';
       },
-      incrementHeight: function (el, value) {
+      incrementHeight (el, value) {
         const startValue = this.parseValue(el.style.height);
         el.style.height = `${startValue - value}px`;
       },
-      decrementHeight: function (el, value) {
+      decrementHeight (el, value) {
         const startValue = this.parseValue(el.style.height);
         el.style.height = `${startValue + value}px`;
       }
@@ -85,8 +82,8 @@
   }
 
   .top, .bottom {
-    /*display: flex;*/
-    /*flex-direction: row;*/
+    display: flex;
+    flex-direction: row;
     height: 50%;
   }
 
