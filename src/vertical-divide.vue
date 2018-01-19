@@ -1,31 +1,37 @@
 <template>
   <div class="vertical-divide">
-    <slot name="left"></slot>
+    <div ref="left" class="left">
+      <slot name="left"></slot>
+    </div>
     <div class="vertical-divider"
          draggable="true"
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <slot name="right"></slot>
+    <div ref="right" class="right">
+      <slot name="right"></slot>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'vertical-divide',
+    props: [
+      'width'
+    ],
     data: () => ({
       width: '',
       dragstartX: null,
       vDivOffset: 0
     }),
-    mounted () {
+    mounted() {
       window.addEventListener('resize', () => this.handleResize());
       this.handleResize();
     },
     methods: {
-      handleResize () {
-        const left = this.$slots.left[0].elm
-          , right = this.$slots.right[0].elm;
+      handleResize() {
+        const {left, right} = this.$refs;
 
         // reset to allow flexbox to update width
         this.width = '';
@@ -41,32 +47,31 @@
 //        const {offsetX, offsetY} = event;
 //        console.table({offsetX, offsetY})
 //      },
-      handleDragstart (event) {
+      handleDragstart(event) {
         event.dataTransfer.setData('text/plain', null);
         this.dragstartX = event.screenX;
       },
-      handleDragend (event) {
+      handleDragend(event) {
         this.vDivOffset = this.dragstartX - event.screenX;
         this.dragstartX = null;
 
-        const left = this.$slots.left[0].elm
-          , right = this.$slots.right[0].elm;
+        const {left, right} = this.$refs;
 
         this.incrementWidth(left, this.vDivOffset);
         this.decrementWidth(right, this.vDivOffset);
       },
-      parseValue (string) {
+      parseValue(string) {
         const valueRegex = /^[\d.]+/
           , valueMatch = string.match(valueRegex)
           , valueString = valueMatch && valueMatch[0];
 
         return parseInt(valueString, 10) || '';
       },
-      incrementWidth (el, value) {
+      incrementWidth(el, value) {
         const startValue = this.parseValue(el.style.width);
         el.style.width = `${startValue - value}px`;
       },
-      decrementWidth (el, value) {
+      decrementWidth(el, value) {
         const startValue = this.parseValue(el.style.width);
         el.style.width = `${startValue + value}px`;
       }

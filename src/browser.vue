@@ -1,56 +1,44 @@
 <template>
-  <VerticalDivide>
-    <div slot="left"
-         class="left"
-    >
-      <HorizontalDivide>
-        <div slot="top"
-             class="top"
-             id="buckets"
-        >
+  <VerticalDivide :width="vertical">
+    <template slot="left">
+      <HorizontalDivide :height="horizontal1"
+                        :top-id="'buckets'"
+                        :bottom-id="'files'">
+        <template slot="top">
           <ul>
             <li>Bucket 1</li>
             <li>Bucket 2</li>
             <li>Bucket 3</li>
           </ul>
-        </div>
-        <div slot="bottom"
-             class="bottom"
-             id="files"
-        >
+        </template>
+        <template slot="bottom">
           <ul>
             <li>File 1</li>
             <li>File 2</li>
             <li>File 3</li>
           </ul>
-        </div>
+        </template>
       </HorizontalDivide>
-    </div>
-    <div slot="right" class="right">
-      <HorizontalDivide>
-        <div
-          slot="top"
-          class="top"
-          id="properties"
-        >
+    </template>
+    <template slot="right">
+      <HorizontalDivide :height="horizontal2"
+                        :top-id="'properties'"
+                        :bottom-id="'preview'">
+        <template slot="top">
           <ul>
             <li>Property 1</li>
             <li>Property 2</li>
             <li>Property 3</li>
           </ul>
-        </div>
-        <div
-          slot="bottom"
-          class="bottom"
-          id="preview"
-        >
+        </template>
+        <template slot="bottom">
           <div class="img"
                style="background-image: url('https://placehold.it/300x300')"
           ></div>
           <!--<img src="https://placehold.it/300x300" alt="placeholder image"/>-->
-        </div>
+        </template>
       </HorizontalDivide>
-    </div>
+    </template>
   </VerticalDivide>
 </template>
 

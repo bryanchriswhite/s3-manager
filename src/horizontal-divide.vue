@@ -1,31 +1,39 @@
 <template>
   <div class="horizontal-divide">
-    <slot name="top"></slot>
+    <div ref="top" class="top" :id="topId">
+      <slot name="top"></slot>
+    </div>
     <div class="horizontal-divider"
          draggable="true"
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <slot name="bottom"></slot>
+    <div ref="bottom" class="bottom" :id="bottomId">
+      <slot name="bottom"></slot>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'horizontal-divide',
+    props: [
+      'height',
+      'topId',
+      'bottomId'
+    ],
     data: () => ({
       height: '',
       dragstartY: null,
       hDivOffset: 0
     }),
-    mounted () {
+    mounted() {
       window.addEventListener('resize', () => this.handleResize());
       this.handleResize();
     },
     methods: {
-      handleResize () {
-        const top = this.$slots.top[0].elm
-          , bottom = this.$slots.bottom[0].elm;
+      handleResize() {
+        const {top, bottom} = this.$refs;
 
         // reset to allow flexbox to update width
         this.height = '';
@@ -41,32 +49,31 @@
 //        const {offsetX, offsetY} = event;
 //        console.table({offsetX, offsetY})
 //      },
-      handleDragstart (event) {
+      handleDragstart(event) {
         event.dataTransfer.setData('text/plain', null);
         this.dragstartY = event.screenY;
       },
-      handleDragend (event) {
+      handleDragend(event) {
         this.hDivOffset = this.dragstartY - event.screenY;
         this.dragstartY = null;
 
-        const top = this.$slots.top[0].elm
-          , bottom = this.$slots.bottom[0].elm;
+        const {top, bottom} = this.$refs;
 
         this.incrementHeight(top, this.hDivOffset);
         this.decrementHeight(bottom, this.hDivOffset);
       },
-      parseValue (string) {
+      parseValue(string) {
         const valueRegex = /^[\d.]+/
           , valueMatch = string.match(valueRegex)
           , valueString = valueMatch && valueMatch[0];
 
         return parseInt(valueString, 10) || '';
       },
-      incrementHeight (el, value) {
+      incrementHeight(el, value) {
         const startValue = this.parseValue(el.style.height);
         el.style.height = `${startValue - value}px`;
       },
-      decrementHeight (el, value) {
+      decrementHeight(el, value) {
         const startValue = this.parseValue(el.style.height);
         el.style.height = `${startValue + value}px`;
       }
