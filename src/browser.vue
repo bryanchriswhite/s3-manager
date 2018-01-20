@@ -1,7 +1,8 @@
 <template>
-  <VerticalDivide :width="vertical">
+  <VerticalDivide id="vertical" :width="vertical">
     <template slot="left">
-      <HorizontalDivide :height="horizontal1"
+      <HorizontalDivide :id="'horizontal1'"
+                        :height="horizontal1"
                         :top-id="'buckets'"
                         :bottom-id="'files'">
         <template slot="top">
@@ -21,7 +22,8 @@
       </HorizontalDivide>
     </template>
     <template slot="right">
-      <HorizontalDivide :height="horizontal2"
+      <HorizontalDivide :id="'horizontal2'"
+                        :height="horizontal2"
                         :top-id="'properties'"
                         :bottom-id="'preview'">
         <template slot="top">
@@ -43,14 +45,19 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import VerticalDivide from './vertical-divide.vue'
   import HorizontalDivide from './horizontal-divide.vue'
 
   export default {
     name: 'browser',
-//    data () {
-//
-//    },
+    computed: {
+      ...mapState({
+        vertical: state => state.dividers.vertical,
+        horizontal1: state => state.dividers.horizontal1,
+        horizontal2: state => state.dividers.horizontal2
+      })
+    },
     components: {
       VerticalDivide,
       HorizontalDivide

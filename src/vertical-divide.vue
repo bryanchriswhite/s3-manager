@@ -1,6 +1,8 @@
 <template>
-  <div class="vertical-divide">
-    <div ref="left" class="left">
+  <div class="vertical-divide" :id="id">
+    <div class="left"
+         :id="leftId"
+         v-bind:style="{width: this.width[0]}">
       <slot name="left"></slot>
     </div>
     <div class="vertical-divider"
@@ -8,72 +10,56 @@
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <div ref="right" class="right">
+    <div class="right"
+         v-bind:style="{width: this.width[1]}">
       <slot name="right"></slot>
     </div>
   </div>
 </template>
 
 <script>
+  import {mapMutations} from 'vuex'
+
   export default {
     name: 'vertical-divide',
     props: [
-      'width'
+      'id',
+      'width',
+      'left-id',
+      'right-id'
     ],
     data: () => ({
-      width: '',
       dragstartX: null,
-      vDivOffset: 0
     }),
     mounted() {
       window.addEventListener('resize', () => this.handleResize());
-      this.handleResize();
+      setTimeout(() => {
+        this.handleResize();
+      }, 1000);
     },
     methods: {
+      ...mapMutations([
+        'resize',
+        'setSize'
+      ]),
       handleResize() {
-        const {left, right} = this.$refs;
-
-        // reset to allow flexbox to update width
-        this.width = '';
-        left.style.width = right.style.width = this.width;
-
-        this.width = getComputedStyle(left).width;
-        left.style.width = right.style.width = this.width;
+        this.setSize({[this.id]: 'width'})
       },
       /*
        *  NB: drag event doesn't contain offsetX/Y in firefox
+       *  handleDrag (event) {
+       *    const {offsetX, offsetY} = event;
+       *    console.table({offsetX, offsetY})
+       *  },
        */
-//      handleDrag (event) {
-//        const {offsetX, offsetY} = event;
-//        console.table({offsetX, offsetY})
-//      },
       handleDragstart(event) {
         event.dataTransfer.setData('text/plain', null);
         this.dragstartX = event.screenX;
       },
       handleDragend(event) {
-        this.vDivOffset = this.dragstartX - event.screenX;
+        const offsetX = this.dragstartX - event.screenX;
         this.dragstartX = null;
-
-        const {left, right} = this.$refs;
-
-        this.incrementWidth(left, this.vDivOffset);
-        this.decrementWidth(right, this.vDivOffset);
-      },
-      parseValue(string) {
-        const valueRegex = /^[\d.]+/
-          , valueMatch = string.match(valueRegex)
-          , valueString = valueMatch && valueMatch[0];
-
-        return parseInt(valueString, 10) || '';
-      },
-      incrementWidth(el, value) {
-        const startValue = this.parseValue(el.style.width);
-        el.style.width = `${startValue - value}px`;
-      },
-      decrementWidth(el, value) {
-        const startValue = this.parseValue(el.style.width);
-        el.style.width = `${startValue + value}px`;
+        this.resize({[this.id]: offsetX})
       }
     }
   }
@@ -94,7 +80,7 @@
   .left, .right {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    /*width: 100%;*/
   }
 
   .vertical-divide,
