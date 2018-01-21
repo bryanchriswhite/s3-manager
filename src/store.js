@@ -28,6 +28,13 @@ const initialState = {
       '40%',
       'calc(60% - var(--divider-thickness)'
     ]
+  },
+  contextMenu: {
+    x: null,
+    y: null,
+    visible: false,
+    context: null,
+    item: null
   }
 };
 
@@ -40,6 +47,16 @@ const mutations = {
   },
   selectRegion(state, region) {
     state.aws.selectedRegion = region;
+  },
+  openContextMenu(state, payload) {
+    state.contextMenu = {
+      ...state.contextMenu,
+      ...payload,
+      visible: true
+    }
+  },
+  closeContextMenu(state) {
+    state.contextMenu.visible = false;
   }
 };
 

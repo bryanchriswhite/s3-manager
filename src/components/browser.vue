@@ -7,12 +7,16 @@
                         :bottom-id="'files'">
         <template slot="top">
           <ul>
-            <li v-for="bucket in buckets">{{bucket}}</li>
+            <li v-for="bucket in buckets"
+                v-on:contextmenu="handleContextmenu($event, 'bucket', bucket)">
+              {{bucket}}
+            </li>
           </ul>
         </template>
         <template slot="bottom">
           <ul>
-            <li v-for="file in files">
+            <li v-for="file in files"
+                v-on:contextmenu="handleContextmenu($event, 'file', file)">
               {{file}}
             </li>
           </ul>
@@ -42,7 +46,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
   import VerticalDivide from './vertical-divide.vue'
   import HorizontalDivide from './horizontal-divide.vue'
 
@@ -60,6 +64,21 @@
     components: {
       VerticalDivide,
       HorizontalDivide
+    },
+    methods: {
+      ...mapMutations([
+        'openContextMenu'
+      ]),
+      handleContextmenu(event, context, item) {
+        this.openContextMenu({
+          x: event.clientX,
+          y: event.clientY,
+          context,
+          item
+        });
+        event.preventDefault();
+        return false;
+      }
     }
   }
 </script>
@@ -83,6 +102,11 @@
   #buckets > ul > li:nth-child(even),
   #files > ul > li:nth-child(even) {
     background: #f4f4f4;
+  }
+
+  #buckets > ul > li:hover,
+  #files > ul > li:hover {
+    background: var(--hover-item-color);
   }
 
   #preview .img {

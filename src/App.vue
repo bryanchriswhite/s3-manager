@@ -5,17 +5,20 @@
       <transition name="fade">
         <router-view></router-view>
       </transition>
+      <ContextMenu></ContextMenu>
     </section>
   </div>
 </template>
 
 <script>
   import Navigation from './components/navigation.vue'
+  import ContextMenu from './components/context-menu.vue'
 
   export default {
     name: 'app',
     components: {
-      Navigation
+      Navigation,
+      ContextMenu
     }
   }
 </script>
@@ -26,6 +29,7 @@
     --divider-thickness: 3px;
     --divider-color: #c1c1c1;
     --base-color: #2c3e50;
+    --hover-item-color: #bed1fd;
   }
 
   body {
