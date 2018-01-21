@@ -32,7 +32,6 @@
           this.$router.push('/config');
       },
       resetLayout() {
-        console.log('initialState:', initialState);
         this.resize(initialState.dividers);
       }
     },

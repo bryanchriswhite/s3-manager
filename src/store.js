@@ -23,7 +23,6 @@ const initialState = {
 
 const mutations = {
   resize(state, payload) {
-    console.table(payload);
     state.dividers = {
       ...state.dividers,
       ...payload
