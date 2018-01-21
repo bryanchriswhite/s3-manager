@@ -83,6 +83,7 @@
     display: flex;
     flex-direction: row;
     overflow-y: auto;
+    transition: height 250ms;
   }
 
   .horizontal-divide,

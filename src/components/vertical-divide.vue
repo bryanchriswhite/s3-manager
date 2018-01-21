@@ -87,6 +87,7 @@
   .left, .right {
     display: flex;
     flex-direction: column;
+    transition: width 250ms;
   }
 
   .vertical-divide,
