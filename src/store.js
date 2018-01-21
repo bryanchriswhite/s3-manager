@@ -7,15 +7,15 @@ const initialState = {
   loggedIn: false,
   dividers: {
     vertical: [
-      '40%',
+      'calc(40% - var(--divider-thickness)',
       '60%'
     ],
     horizontal1: [
-      '30%',
+      'calc(30% - var(--divider-thickness)',
       '70%'
     ],
     horizontal2: [
-      '40%',
+      'calc(40% - var(--divider-thickness)',
       '60%'
     ]
   }
@@ -23,6 +23,7 @@ const initialState = {
 
 const mutations = {
   resize(state, payload) {
+    console.table(payload);
     state.dividers = {
       ...state.dividers,
       ...payload

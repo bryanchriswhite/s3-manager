@@ -1,20 +1,20 @@
 <template>
   <div class="horizontal-divide" :id="id">
-    <div class="top"
+    <section class="top"
          :id="topId"
          v-bind:style="{height: this.heights[0]}">
       <slot name="top"></slot>
-    </div>
+    </section>
     <div class="horizontal-divider"
          draggable="true"
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <div class="bottom"
+    <section class="bottom"
          :id="bottomId"
          v-bind:style="{height: this.heights[1]}">
       <slot name="bottom"></slot>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -57,7 +57,7 @@
         const newPercent = (startPercent / 100 * maxHeight - offsetY) / maxHeight * 100;
         this.resize({
           [this.id]: [
-            `${newPercent}%`,
+            `calc(${newPercent}% - var(--divider-thickness))`,
             `${100 - newPercent}%`
           ]
         });
@@ -68,7 +68,7 @@
 
 <style>
   .horizontal-divider {
-    height: 3px;
+    height: var(--divider-thickness);
     background: #545454;
     cursor: ns-resize;
   }

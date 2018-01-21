@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <nav>
+
+    </nav>
+    <section id="browser">
+      <router-view></router-view>
+    </section>
   </div>
 </template>
 
@@ -11,6 +16,11 @@
 </script>
 
 <style>
+  :root {
+    --nav-height: 80px;
+    --divider-thickness: 3px;
+  }
+
   body {
     margin: 0;
   }
@@ -22,5 +32,13 @@
     text-align: center;
     color: #2c3e50;
     height: 100vh;
+  }
+
+  nav {
+    height: var(--nav-height)
+  }
+
+  #browser {
+    height: calc(100% - var(--nav-height))
   }
 </style>

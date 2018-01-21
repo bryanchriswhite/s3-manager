@@ -37,7 +37,6 @@
           <div class="img"
                style="background-image: url('https://placehold.it/300x300')"
           ></div>
-          <!--<img src="https://placehold.it/300x300" alt="placeholder image"/>-->
         </template>
       </HorizontalDivide>
     </template>

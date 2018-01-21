@@ -1,20 +1,20 @@
 <template>
   <div class="vertical-divide" :id="id">
-    <div class="left"
+    <section class="left"
          :id="leftId"
          v-bind:style="{width: this.widths[0]}">
       <slot name="left"></slot>
-    </div>
+    </section>
     <div class="vertical-divider"
          draggable="true"
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <div class="right"
+    <section class="right"
          :id="rightId"
          v-bind:style="{width: this.widths[1]}">
       <slot name="right"></slot>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -57,7 +57,7 @@
         const newPercent = (startPercent / 100 * maxWidth - offsetX) / maxWidth * 100;
         this.resize({
           [this.id]: [
-            `${newPercent}%`,
+            `calc(${newPercent}% - var(--divider-thickness))`,
             `${100 - newPercent}%`
           ]
         });
@@ -73,7 +73,7 @@
   }
 
   .vertical-divider {
-    width: 3px;
+    width: var(--divider-thickness);
     background: #545454;
     cursor: ew-resize;
   }
