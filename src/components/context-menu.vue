@@ -1,18 +1,20 @@
 <template>
-  <div id="context-menu"
-       v-show="visible"
-       v-on:blur="closeContextMenu"
-       v-bind:style="{
+  <transition name="fade">
+    <div id="context-menu"
+         v-show="visible"
+         v-on:blur="closeContextMenu"
+         v-bind:style="{
          top: `${this.y}px`,
          left: `${this.x}px`
        }"
-       tabindex="-1">
-    <ul>
-      <li>{{context}} item 1</li>
-      <li>{{context}} item 2</li>
-      <li>{{context}} item 3</li>
-    </ul>
-  </div>
+         tabindex="-1">
+      <ul>
+        <li>{{context}} item 1</li>
+        <li>{{context}} item 2</li>
+        <li>{{context}} item 3</li>
+      </ul>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -32,10 +34,19 @@
     methods: {
       ...mapMutations([
         'closeContextMenu'
-      ])
+      ]),
+      handleEscapeKey(event) {
+        if (event.key == 'Escape') this.closeContextMenu();
+      }
     },
     updated() {
-      if (this.visible) this.$el.focus();
+      if (this.visible) {
+        this.$el.focus();
+        window.addEventListener('keydown', this.handleEscapeKey)
+      } else {
+        this.$el.blur();
+        window.removeEventListener('keydown', this.handleEscapeKey)
+      }
     }
   }
 </script>

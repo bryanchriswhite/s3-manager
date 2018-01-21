@@ -30,6 +30,7 @@
     --divider-color: #c1c1c1;
     --base-color: #2c3e50;
     --hover-item-color: #bed1fd;
+    --context-item-height: 30px;
   }
 
   body {
@@ -55,7 +56,7 @@
     flex-direction: column;
   }
 
-  .fade-enter-active {
+  .fade-enter-active, .fade-leave-active {
     transition: opacity 500ms;
   }
 
