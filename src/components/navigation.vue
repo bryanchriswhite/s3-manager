@@ -3,6 +3,9 @@
     <h1>
       S3 Manager
     </h1>
+    <button v-on:click="resetLayout">
+      Reset Layout
+    </button>
     <button class="config"
             v-on:click="toggleConfig">
       {{editingConfig ? 'Close' : 'Edit'}} Config
@@ -11,13 +14,23 @@
 </template>
 
 <script>
+  import {mapMutations} from 'vuex'
+  import {initialState} from '../store.js'
+
   export default {
     name: 'navigation',
     methods: {
+      ...mapMutations([
+        'resize'
+      ]),
       toggleConfig() {
         this.editingConfig ?
           this.$router.push('/') :
           this.$router.push('/config');
+      },
+      resetLayout() {
+        console.log('initialState:', initialState);
+        this.resize(initialState.dividers);
       }
     },
     computed: {

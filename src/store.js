@@ -32,6 +32,10 @@ const mutations = {
 };
 
 export default new Vuex.Store({
-  state: initialState,
+  state: Object.assign({}, initialState),
   mutations
 });
+
+export {
+  initialState
+}
