@@ -3,9 +3,12 @@
     <h1>
       S3 Manager
     </h1>
-    <button v-on:click="resetLayout">
-      Reset Layout
-    </button>
+    <transition name="fade">
+      <button v-show="!editingConfig"
+              v-on:click="resetLayout">
+        Reset Layout
+      </button>
+    </transition>
     <button class="config"
             v-on:click="toggleConfig">
       {{editingConfig ? 'Close' : 'Edit'}} Config

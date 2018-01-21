@@ -31,6 +31,10 @@
     margin: 0;
   }
 
+  button {
+    min-width: 100px;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
