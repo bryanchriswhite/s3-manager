@@ -20,7 +20,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
-  import {parseValue} from './utils.js'
+  import {parseValue} from '../utils.js'
 
   export default {
     name: 'horizontal-divide',
