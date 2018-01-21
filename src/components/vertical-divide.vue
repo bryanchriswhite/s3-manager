@@ -19,20 +19,26 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
   import {parseValue} from '../utils.js'
 
   export default {
     name: 'vertical-divide',
     props: [
       'id',
-      'widths',
       'left-id',
       'right-id'
     ],
     data: () => ({
       dragstartX: null,
     }),
+    computed: {
+      ...mapState({
+        widths: function (state) {
+          return state.dividers[this.id]
+        }
+      })
+    },
     methods: {
       ...mapMutations([
         'resize'

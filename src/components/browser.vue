@@ -1,8 +1,7 @@
 <template>
-  <VerticalDivide id="vertical" :widths="vertical">
+  <VerticalDivide id="vertical">
     <template slot="left">
       <HorizontalDivide :id="'horizontal1'"
-                        :heights="horizontal1"
                         :top-id="'buckets'"
                         :bottom-id="'files'">
         <template slot="top">
@@ -25,7 +24,6 @@
     </template>
     <template slot="right">
       <HorizontalDivide :id="'horizontal2'"
-                        :heights="horizontal2"
                         :top-id="'properties'"
                         :bottom-id="'preview'">
         <template slot="top">
@@ -54,9 +52,6 @@
     name: 'browser',
     computed: {
       ...mapState({
-        vertical: state => state.dividers.vertical,
-        horizontal1: state => state.dividers.horizontal1,
-        horizontal2: state => state.dividers.horizontal2,
         buckets: state => state.aws.buckets,
         files: state => state.aws.files
       })

@@ -1,8 +1,8 @@
 <template>
   <div class="horizontal-divide" :id="id">
     <section class="top"
-         :id="topId"
-         v-bind:style="{height: this.heights[0]}">
+             :id="topId"
+             v-bind:style="{height: this.heights[0]}">
       <slot name="top"></slot>
     </section>
     <div class="horizontal-divider"
@@ -11,28 +11,34 @@
          v-on:dragend="handleDragend"
     ></div>
     <section class="bottom"
-         :id="bottomId"
-         v-bind:style="{height: this.heights[1]}">
+             :id="bottomId"
+             v-bind:style="{height: this.heights[1]}">
       <slot name="bottom"></slot>
     </section>
   </div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
   import {parseValue} from '../utils.js'
 
   export default {
     name: 'horizontal-divide',
     props: [
       'id',
-      'heights',
       'topId',
       'bottomId'
     ],
     data: () => ({
       dragstartY: null,
     }),
+    computed: {
+      ...mapState({
+        heights: function (state) {
+          return state.dividers[this.id];
+        }
+      })
+    },
     methods: {
       ...mapMutations([
         'resize'
