@@ -1,4 +1,6 @@
 import AWS from 'aws-sdk'
+import s3Regions from './assets/s3regions.json'
+
 
 const loadConfig = () => {
   const configString = window.localStorage.getItem('aws-config');
@@ -15,7 +17,8 @@ const loadConfig = () => {
 
 const s3 = new AWS.S3({region: 'us-east-2'});
 
-export default {
+export {
+  s3Regions,
   loadConfig,
   s3
 }

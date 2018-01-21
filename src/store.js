@@ -1,15 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import aws from './aws.js'
+import _ from 'lodash'
+import {s3Regions, loadConfig} from './aws.js'
 
 Vue.use(Vuex);
 
 const initialState = {
   aws: {
-    config: aws.loadConfig(),
-    buckets: [],
+    config: loadConfig(),
+    s3Regions,
+    selectedRegion: 'us-east-2',
+    buckets: _.range(25).map(i => `Bucket ${i}`),
     selectedBucket: null,
-    files: [],
+    files: _.range(25).map(i => `File ${i}`),
     selectedFile: null
   },
   dividers: {
@@ -34,6 +37,9 @@ const mutations = {
       ...state.dividers,
       ...payload
     }
+  },
+  selectRegion(state, region) {
+    state.aws.selectedRegion = region;
   }
 };
 

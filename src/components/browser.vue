@@ -7,16 +7,14 @@
                         :bottom-id="'files'">
         <template slot="top">
           <ul>
-            <li>Bucket 1</li>
-            <li>Bucket 2</li>
-            <li>Bucket 3</li>
+            <li v-for="bucket in buckets">{{bucket}}</li>
           </ul>
         </template>
         <template slot="bottom">
           <ul>
-            <li>File 1</li>
-            <li>File 2</li>
-            <li>File 3</li>
+            <li v-for="file in files">
+              {{file}}
+            </li>
           </ul>
         </template>
       </HorizontalDivide>
@@ -54,7 +52,9 @@
       ...mapState({
         vertical: state => state.dividers.vertical,
         horizontal1: state => state.dividers.horizontal1,
-        horizontal2: state => state.dividers.horizontal2
+        horizontal2: state => state.dividers.horizontal2,
+        buckets: state => state.aws.buckets,
+        files: state => state.aws.files
       })
     },
     components: {

@@ -76,6 +76,7 @@
   .top, .bottom {
     display: flex;
     flex-direction: row;
+    overflow-y: auto;
   }
 
   .horizontal-divide,
