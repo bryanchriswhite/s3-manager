@@ -65,6 +65,26 @@
 </script>
 
 <style>
+  #buckets, #files {
+    text-align: left;
+  }
+
+  #buckets > ul, #files > ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #buckets > ul > li,
+  #files > ul > li {
+    padding: 2px 0 2px 20px;
+  }
+
+  #buckets > ul > li:nth-child(even),
+  #files > ul > li:nth-child(even) {
+    background: #f4f4f4;
+  }
+
   #preview .img {
     height: 100%;
     width: 100%;

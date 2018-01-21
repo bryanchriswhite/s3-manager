@@ -46,7 +46,7 @@
 <style>
   nav {
     height: var(--nav-height);
-    border-bottom: var(--divider-thickness) solid var(--divider-color);
+    border-bottom: var(--divider-thickness) solid var(--base-color);
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;

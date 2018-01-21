@@ -24,7 +24,8 @@
   :root {
     --nav-height: 40px;
     --divider-thickness: 3px;
-    --divider-color: #545454;
+    --divider-color: #c1c1c1;
+    --base-color: #2c3e50;
   }
 
   body {
@@ -40,7 +41,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: var(--base-color);
     height: 100vh;
   }
 
