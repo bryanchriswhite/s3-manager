@@ -7,16 +7,16 @@ const initialState = {
   loggedIn: false,
   dividers: {
     vertical: [
-      'calc(40% - var(--divider-thickness)',
-      '60%'
+      '40%',
+      'calc(60% - var(--divider-thickness)'
     ],
     horizontal1: [
-      'calc(30% - var(--divider-thickness)',
-      '70%'
+      '30%',
+      'calc(70% - var(--divider-thickness)'
     ],
     horizontal2: [
-      'calc(40% - var(--divider-thickness)',
-      '60%'
+      '40%',
+      'calc(60% - var(--divider-thickness)'
     ]
   }
 };

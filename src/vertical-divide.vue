@@ -57,8 +57,8 @@
         const newPercent = (startPercent / 100 * maxWidth - offsetX) / maxWidth * 100;
         this.resize({
           [this.id]: [
-            `calc(${newPercent}% - var(--divider-thickness))`,
-            `${100 - newPercent}%`
+            `${newPercent}%`,
+            `calc(${100 - newPercent}% - var(--divider-thickness))`,
           ]
         });
       }
@@ -74,7 +74,7 @@
 
   .vertical-divider {
     width: var(--divider-thickness);
-    background: #545454;
+    background: var(--divider-color);
     cursor: ew-resize;
   }
 

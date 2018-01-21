@@ -57,8 +57,8 @@
         const newPercent = (startPercent / 100 * maxHeight - offsetY) / maxHeight * 100;
         this.resize({
           [this.id]: [
-            `calc(${newPercent}% - var(--divider-thickness))`,
-            `${100 - newPercent}%`
+            `${newPercent}%`,
+            `calc(${100 - newPercent}% - var(--divider-thickness))`,
           ]
         });
       }
@@ -69,7 +69,7 @@
 <style>
   .horizontal-divider {
     height: var(--divider-thickness);
-    background: #545454;
+    background: var(--divider-color);
     cursor: ns-resize;
   }
 

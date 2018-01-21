@@ -19,6 +19,7 @@
   :root {
     --nav-height: 80px;
     --divider-thickness: 3px;
+    --divider-color: #545454;
   }
 
   body {
