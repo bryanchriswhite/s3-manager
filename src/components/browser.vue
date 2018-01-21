@@ -34,14 +34,10 @@
             <tbody>
             <tr v-for="file in files"
                 v-bind:class="{selected: file.name == selectedFile.name}"
-                v-on:click="selectFile(file.name)"
+                v-on:click="selectFile(file)"
                 v-on:contextmenu="handleContextmenu($event, 'file', file)">
-              <td>
-                {{file.name}}
-              </td>
-              <td>
-                {{file.modified}}
-              </td>
+              <td>{{file.name}}</td>
+              <td>{{file.lastModified}}</td>
               <td>{{formatSize(file.size)}}</td>
             </tr>
             </tbody>
@@ -54,11 +50,28 @@
                         :top-id="'properties'"
                         :bottom-id="'preview'">
         <template slot="top">
-          <ul>
-            <li>Property 1</li>
-            <li>Property 2</li>
-            <li>Property 3</li>
-          </ul>
+          <section class="metadata">
+            <ul class="labels">
+              <li>File Name</li>
+              <li>Public Url</li>
+              <li>Size</li>
+              <li>Last Modified</li>
+              <li>Content Type</li>
+              <li>Encoding</li>
+            </ul>
+            <ul class="values">
+              <li>{{selectedFile.name || '&nbsp;'}}</li>
+              <li>{{selectedFile.url || '&nbsp;'}}</li>
+              <li>{{formatSize(selectedFile.size) || '&nbsp;'}}</li>
+              <li>{{selectedFile.lastModified || '&nbsp;'}}</li>
+              <li>{{selectedFile.contentType || '&nbsp;'}}</li>
+              <li v-bind:class="{i: !selectedFile.encoding}">
+                {{selectedFile.encoding || 'N/A'}}
+              </li>
+            </ul>
+          </section>
+          <textarea name="embed-code" cols="30" rows="10"
+                    v-bind:value="embedCode"></textarea>
         </template>
         <template slot="bottom">
           <div class="img"
@@ -73,7 +86,7 @@
 </template>
 
 <script>
-  import {mapState, mapMutations} from 'vuex'
+  import {mapState, mapMutations, mapActions} from 'vuex'
   import VerticalDivide from './vertical-divide.vue'
   import HorizontalDivide from './horizontal-divide.vue'
   import {formatSize} from '../utils.js'
@@ -86,7 +99,8 @@
         files: state => state.aws.files,
         selectedBucket: state => state.aws.selectedBucket,
         selectedFile: state => state.aws.selectedFile
-      })
+      }),
+      embedCode: () => 'WIP'
     },
     components: {
       VerticalDivide,
@@ -96,6 +110,8 @@
       formatSize,
       ...mapMutations([
         'openContextMenu',
+      ]),
+      ...mapActions([
         'selectFile'
       ]),
       handleContextmenu(event, context, item) {
@@ -136,6 +152,39 @@
   #buckets tbody > tr.selected,
   #files tbody > tr.selected {
     background: var(--selected-item-color);
+  }
+
+  #properties {
+    flex-direction: column;
+  }
+
+  #properties .i {
+    font-style: italic;
+  }
+
+  #properties .labels,
+  #properties .values {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #properties .metadata {
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  #properties .labels {
+    align-items: flex-end;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  #properties .values {
+    align-items: flex-start;
   }
 
   #preview .img {

@@ -24,6 +24,8 @@ function buildS3Options(state) {
 }
 
 function formatSize(bytes) {
+  if (!bytes) return '';
+
   const formats = new function () {
     this.B = {unit: 'B', value: bytes};
     this.KB = {unit: 'KB', value: this.B.value / 1024};

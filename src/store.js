@@ -79,16 +79,8 @@ const mutations = {
   updateFiles(state, payload) {
     state.aws.files = aws.parseFiles(payload);
   },
-  selectFile(state, name) {
-    const url = state.aws.s3.getSignedUrl('getObject', {
-      Bucket: state.aws.selectedBucket,
-      Key: name
-    });
-
-    state.aws.selectedFile = {
-      name,
-      url
-    };
+  selectFile(state, payload) {
+    state.aws.selectedFile = aws.parseFile(payload);
   }
 };
 
@@ -110,6 +102,25 @@ const actions = {
       if (err) return console.error('Listing objects for bucket %s failed:', bucket, err);
 
       commit('updateFiles', data)
+    });
+  },
+  selectFile({commit, state}, file) {
+    // const url = state.aws.s3.getSignedUrl('getObject', {
+    //   Bucket: state.aws.selectedBucket,
+    //   Key: name
+    // });
+    const bucket = state.aws.selectedBucket;
+    const url = `http://${bucket}/${file.name}`;
+
+    // NB: pretty much just used to get content-type currently
+    state.aws.s3.headObject({
+      Bucket: bucket,
+      Key: file.name
+    }, (err, data) => {
+      console.log(data);
+      if (err) return console.error('Retrieving object metadata for key %s in bucket %s failed:', file.name, bucket, err);
+
+      commit('selectFile', {file, data, url});
     });
   }
 };

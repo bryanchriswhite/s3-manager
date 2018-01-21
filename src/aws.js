@@ -31,9 +31,19 @@ aws.saveConfig = (config) => {
 aws.parseFiles = (data) => {
   return data.Contents.map(file => ({
     name: file.Key,
-    modified: file.LastModified,
+    lastModified: file.LastModified,
     size: file.Size
   }))
+};
+
+aws.parseFile = ({file, data, url}) => {
+  return {
+    name: file.name,
+    url,
+    size: file.size,
+    lastModified: data.LastModified,
+    contentType: data.ContentType
+  }
 };
 
 aws.S3 = AWS.S3;
