@@ -1,23 +1,28 @@
 <template>
   <div id="app">
-    <nav>
-
-    </nav>
-    <section id="browser">
-      <router-view></router-view>
+    <Navigation></Navigation>
+    <section id="content">
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
     </section>
   </div>
 </template>
 
 <script>
+  import Navigation from './navigation.vue'
+
   export default {
-    name: 'app'
+    name: 'app',
+    components: {
+      Navigation
+    }
   }
 </script>
 
 <style>
   :root {
-    --nav-height: 80px;
+    --nav-height: 40px;
     --divider-thickness: 3px;
     --divider-color: #545454;
   }
@@ -35,11 +40,17 @@
     height: 100vh;
   }
 
-  nav {
-    height: var(--nav-height)
+  #content {
+    height: calc(100% - var(--nav-height));
+    display: flex;
+    flex-direction: column;
   }
 
-  #browser {
-    height: calc(100% - var(--nav-height))
+  .fade-enter-active {
+    transition: opacity 500ms;
+  }
+
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>

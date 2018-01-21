@@ -12,12 +12,12 @@
 
 <script>
   export default {
-    name: 'nav',
+    name: 'navigation',
     methods: {
       toggleConfig() {
         this.editingConfig ?
-          this.$router.push('/config') :
-          this.$router.push('/');
+          this.$router.push('/') :
+          this.$router.push('/config');
       }
     },
     computed: {
