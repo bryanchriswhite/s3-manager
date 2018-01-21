@@ -2,23 +2,40 @@ import AWS from 'aws-sdk'
 import s3Regions from './assets/s3regions.json'
 
 
-const loadConfig = () => {
-  const configString = window.localStorage.getItem('aws-config');
-  let config = null;
+const aws = {};
+const CONFIG_STORAGE_KEY = 'aws-config';
+
+aws.s3Regions = s3Regions;
+
+aws.loadConfig = () => {
+  const configString = window.localStorage.getItem(CONFIG_STORAGE_KEY);
+  let config = {
+    credentials: {},
+    region: ''
+  };
 
   try {
-     config = JSON.parse(configString);
-  } catch(err) {
+    if (configString) config = JSON.parse(configString);
+  } catch (err) {
     console.error('Unable to load AWS config from localstorage!');
   }
 
   return config;
 };
 
-const s3 = new AWS.S3({region: 'us-east-2'});
+aws.saveConfig = (config) => {
+  const configString = JSON.stringify(config);
+  window.localStorage.setItem(CONFIG_STORAGE_KEY, configString);
+};
 
-export {
-  s3Regions,
-  loadConfig,
-  s3
-}
+aws.parseFiles = (data) => {
+  return data.Contents.map(file => ({
+    name: file.Key,
+    modified: file.LastModified,
+    size: file.Size
+  }))
+};
+
+aws.S3 = AWS.S3;
+
+export default aws;

@@ -5,20 +5,47 @@
                         :top-id="'buckets'"
                         :bottom-id="'files'">
         <template slot="top">
-          <ul>
-            <li v-for="bucket in buckets"
+          <table>
+            <thead>
+            <tr>
+              <th>Bucket Name</th>
+              <th>File Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="bucket in buckets"
+                v-bind:class="{selected: bucket == selectedBucket}"
                 v-on:contextmenu="handleContextmenu($event, 'bucket', bucket)">
-              {{bucket}}
-            </li>
-          </ul>
+              <td>{{bucket}}</td>
+              <td>{{files.length}}</td>
+            </tr>
+            </tbody>
+          </table>
         </template>
         <template slot="bottom">
-          <ul>
-            <li v-for="file in files"
+          <table>
+            <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Last Modified</th>
+              <th>Size</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="file in files"
+                v-bind:class="{selected: file.name == selectedFile.name}"
+                v-on:click="selectFile(file.name)"
                 v-on:contextmenu="handleContextmenu($event, 'file', file)">
-              {{file}}
-            </li>
-          </ul>
+              <td>
+                {{file.name}}
+              </td>
+              <td>
+                {{file.modified}}
+              </td>
+              <td>{{formatSize(file.size)}}</td>
+            </tr>
+            </tbody>
+          </table>
         </template>
       </HorizontalDivide>
     </template>
@@ -35,7 +62,9 @@
         </template>
         <template slot="bottom">
           <div class="img"
-               style="background-image: url('https://placehold.it/300x300')"
+               v-bind:style="{
+                  'background-image': `url(${selectedFile.url})`
+               }"
           ></div>
         </template>
       </HorizontalDivide>
@@ -47,13 +76,16 @@
   import {mapState, mapMutations} from 'vuex'
   import VerticalDivide from './vertical-divide.vue'
   import HorizontalDivide from './horizontal-divide.vue'
+  import {formatSize} from '../utils.js'
 
   export default {
     name: 'browser',
     computed: {
       ...mapState({
         buckets: state => state.aws.buckets,
-        files: state => state.aws.files
+        files: state => state.aws.files,
+        selectedBucket: state => state.aws.selectedBucket,
+        selectedFile: state => state.aws.selectedFile
       })
     },
     components: {
@@ -61,8 +93,10 @@
       HorizontalDivide
     },
     methods: {
+      formatSize,
       ...mapMutations([
-        'openContextMenu'
+        'openContextMenu',
+        'selectFile'
       ]),
       handleContextmenu(event, context, item) {
         this.openContextMenu({
@@ -83,25 +117,25 @@
     text-align: left;
   }
 
-  #buckets > ul, #files > ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  #buckets > ul > li,
-  #files > ul > li {
+  #buckets tbody > tr,
+  #files tbody > tr {
     padding: 2px 0 2px 20px;
+    cursor: pointer;
   }
 
-  #buckets > ul > li:nth-child(even),
-  #files > ul > li:nth-child(even) {
+  #buckets tbody > tr:nth-child(odd),
+  #files tbody > tr:nth-child(odd) {
     background: #f4f4f4;
   }
 
-  #buckets > ul > li:hover,
-  #files > ul > li:hover {
+  #buckets tbody > tr:hover,
+  #files tbody > tr:hover {
     background: var(--hover-item-color);
+  }
+
+  #buckets tbody > tr.selected,
+  #files tbody > tr.selected {
+    background: var(--selected-item-color);
   }
 
   #preview .img {
@@ -109,6 +143,6 @@
     width: 100%;
     background-repeat: no-repeat;
     background-size: contain;
-    background-position: center center;
+    background-position: top center;
   }
 </style>

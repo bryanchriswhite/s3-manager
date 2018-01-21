@@ -1,13 +1,20 @@
 <template>
   <form id="config">
-    <label for="region">Region:</label>
-    <select name="region"
-            v-model="selectedRegion">
-      <option v-for="_region in regions"
-              v-bind:value="_region.region">
-        {{_region.name}}
-      </option>
-    </select>
+      <select name="region"
+              v-model="selectedRegion">
+        <option v-for="region in regions"
+                v-bind:value="region.region">
+          {{region.name}}
+        </option>
+      </select>
+      <input type="text"
+             name="key-id"
+             placeholder="Secret Key Id"
+             v-model="keyId"/>
+      <input type="password"
+             name="secret-key"
+             placeholder="Access Secret Key"
+             v-model="secretKey"/>
   </form>
 </template>
 
@@ -26,6 +33,26 @@
         },
         set(value) {
           this.$store.commit('selectRegion', value);
+        }
+      },
+      keyId: {
+        get() {
+          return this.$store.state.aws.credentials.keyId;
+        },
+        set(keyId) {
+          this.$store.commit('updateCredentials', {
+            keyId
+          });
+        }
+      },
+      secretKey: {
+        get() {
+          return this.$store.state.aws.credentials.secretKey;
+        },
+        set(secretKey) {
+          this.$store.commit('updateCredentials', {
+            secretKey
+          });
         }
       }
     }

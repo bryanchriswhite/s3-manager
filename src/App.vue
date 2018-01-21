@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  import {mapActions} from 'vuex'
   import Navigation from './components/navigation.vue'
   import ContextMenu from './components/context-menu.vue'
 
@@ -19,6 +20,14 @@
     components: {
       Navigation,
       ContextMenu
+    },
+    methods: {
+      ...mapActions([
+        'refreshBuckets'
+      ])
+    },
+    created() {
+      this.refreshBuckets();
     }
   }
 </script>
@@ -30,6 +39,7 @@
     --divider-color: #c1c1c1;
     --base-color: #2c3e50;
     --hover-item-color: #bed1fd;
+    --selected-item-color: #cfcfcf;
     --context-item-height: 30px;
   }
 
