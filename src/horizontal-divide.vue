@@ -1,9 +1,8 @@
 <template>
   <div class="horizontal-divide" :id="id">
-    <div ref="top"
-         class="top"
+    <div class="top"
          :id="topId"
-         v-bind:style="{height: this.height[0]}">
+         v-bind:style="{height: this.heights[0]}">
       <slot name="top"></slot>
     </div>
     <div class="horizontal-divider"
@@ -11,10 +10,9 @@
          v-on:dragstart="handleDragstart"
          v-on:dragend="handleDragend"
     ></div>
-    <div ref="bottom"
-         class="bottom"
+    <div class="bottom"
          :id="bottomId"
-         v-bind:style="{height: this.height[1]}">
+         v-bind:style="{height: this.heights[1]}">
       <slot name="bottom"></slot>
     </div>
   </div>
@@ -22,32 +20,23 @@
 
 <script>
   import {mapMutations} from 'vuex'
+  import {parseValue} from './utils.js'
 
   export default {
     name: 'horizontal-divide',
     props: [
       'id',
-      'height',
+      'heights',
       'topId',
       'bottomId'
     ],
     data: () => ({
       dragstartY: null,
     }),
-    mounted() {
-      window.addEventListener('resize', () => this.handleResize());
-      setTimeout(() => {
-        this.handleResize();
-      }, 1000);
-    },
     methods: {
       ...mapMutations([
-        'resize',
-        'setSize'
+        'resize'
       ]),
-      handleResize() {
-        this.setSize({[this.id]: 'height'})
-      },
       /*
        *  NB: drag event doesn't contain offsetX/Y in firefox
        *  handleDrag (event) {
@@ -62,7 +51,16 @@
       handleDragend(event) {
         const offsetY = this.dragstartY - event.screenY;
         this.dragstartY = null;
-        this.resize({[this.id]: offsetY})
+
+        const startPercent = parseValue(this.heights[0]);
+        const maxHeight = document.documentElement.clientHeight;
+        const newPercent = (startPercent / 100 * maxHeight - offsetY) / maxHeight * 100;
+        this.resize({
+          [this.id]: [
+            `${newPercent}%`,
+            `${100 - newPercent}%`
+          ]
+        });
       }
     }
   }
@@ -78,7 +76,6 @@
   .top, .bottom {
     display: flex;
     flex-direction: row;
-    /*height: 50%;*/
   }
 
   .horizontal-divide,

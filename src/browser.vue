@@ -1,8 +1,8 @@
 <template>
-  <VerticalDivide id="vertical" :width="vertical">
+  <VerticalDivide id="vertical" :widths="vertical">
     <template slot="left">
       <HorizontalDivide :id="'horizontal1'"
-                        :height="horizontal1"
+                        :heights="horizontal1"
                         :top-id="'buckets'"
                         :bottom-id="'files'">
         <template slot="top">
@@ -23,7 +23,7 @@
     </template>
     <template slot="right">
       <HorizontalDivide :id="'horizontal2'"
-                        :height="horizontal2"
+                        :heights="horizontal2"
                         :top-id="'properties'"
                         :bottom-id="'preview'">
         <template slot="top">

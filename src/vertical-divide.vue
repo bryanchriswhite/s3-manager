@@ -2,7 +2,7 @@
   <div class="vertical-divide" :id="id">
     <div class="left"
          :id="leftId"
-         v-bind:style="{width: this.width[0]}">
+         v-bind:style="{width: this.widths[0]}">
       <slot name="left"></slot>
     </div>
     <div class="vertical-divider"
@@ -11,7 +11,8 @@
          v-on:dragend="handleDragend"
     ></div>
     <div class="right"
-         v-bind:style="{width: this.width[1]}">
+         :id="rightId"
+         v-bind:style="{width: this.widths[1]}">
       <slot name="right"></slot>
     </div>
   </div>
@@ -19,32 +20,23 @@
 
 <script>
   import {mapMutations} from 'vuex'
+  import {parseValue} from './utils.js'
 
   export default {
     name: 'vertical-divide',
     props: [
       'id',
-      'width',
+      'widths',
       'left-id',
       'right-id'
     ],
     data: () => ({
       dragstartX: null,
     }),
-    mounted() {
-      window.addEventListener('resize', () => this.handleResize());
-      setTimeout(() => {
-        this.handleResize();
-      }, 1000);
-    },
     methods: {
       ...mapMutations([
-        'resize',
-        'setSize'
+        'resize'
       ]),
-      handleResize() {
-        this.setSize({[this.id]: 'width'})
-      },
       /*
        *  NB: drag event doesn't contain offsetX/Y in firefox
        *  handleDrag (event) {
@@ -59,7 +51,16 @@
       handleDragend(event) {
         const offsetX = this.dragstartX - event.screenX;
         this.dragstartX = null;
-        this.resize({[this.id]: offsetX})
+
+        const startPercent = parseValue(this.widths[0]);
+        const maxWidth = document.documentElement.clientWidth;
+        const newPercent = (startPercent / 100 * maxWidth - offsetX) / maxWidth * 100;
+        this.resize({
+          [this.id]: [
+            `${newPercent}%`,
+            `${100 - newPercent}%`
+          ]
+        });
       }
     }
   }
@@ -80,7 +81,6 @@
   .left, .right {
     display: flex;
     flex-direction: column;
-    /*width: 100%;*/
   }
 
   .vertical-divide,
