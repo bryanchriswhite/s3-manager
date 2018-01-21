@@ -122,7 +122,6 @@ const actions = {
       Bucket: bucket,
       Key: file.name
     }, (err, data) => {
-      console.log(data);
       if (err) return console.error('Retrieving object metadata for key %s in bucket %s failed:', file.name, bucket, err);
 
       commit('selectFile', {file, data, url});
