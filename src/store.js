@@ -1,10 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import aws from './aws.js'
 
 Vue.use(Vuex);
 
 const initialState = {
-  loggedIn: false,
+  aws: {
+    config: aws.loadConfig(),
+    buckets: [],
+    selectedBucket: null,
+    files: [],
+    selectedFile: null
+  },
   dividers: {
     vertical: [
       '40%',
