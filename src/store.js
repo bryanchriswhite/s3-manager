@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import _ from 'lodash'
 import aws from './aws.js'
-import {buildConfig, buildS3Options} from './utils.js'
+import {buildConfig, buildS3Options, embedFormats} from './utils.js'
 
 Vue.use(Vuex);
 
@@ -19,8 +19,6 @@ const initialState = {
     s3Regions: aws.s3Regions,
     buckets: ['gpg.bryanchriswhite.com'],
     files: [],
-    selectedBucket: 'gpg.bryanchriswhite.com',
-    selectedFile: {}
   },
   dividers: {
     vertical: [
@@ -42,7 +40,11 @@ const initialState = {
     visible: false,
     context: null,
     item: null
-  }
+  },
+  selectedBucket: 'gpg.bryanchriswhite.com',
+  selectedFile: {},
+  embedFormats,
+  selectedEmbedFormat: embedFormats[0]
 };
 
 const mutations = {
@@ -80,13 +82,16 @@ const mutations = {
     state.aws.files = aws.parseFiles(payload);
   },
   selectFile(state, payload) {
-    state.aws.selectedFile = aws.parseFile(payload);
+    state.selectedFile = aws.parseFile(payload);
+  },
+  updateEmbedFormat(state, format) {
+    state.selectedEmbedFormat = format;
   }
 };
 
 const actions = {
   refreshBuckets({commit, dispatch, state}) {
-    dispatch('refreshFiles', state.aws.selectedBucket);
+    dispatch('refreshFiles', state.selectedBucket);
     /*
      * CORS isn't supported for the `listBuckets` operation - FML
      * state.aws.s3.listBuckets((err, data) => {
@@ -109,7 +114,7 @@ const actions = {
     //   Bucket: state.aws.selectedBucket,
     //   Key: name
     // });
-    const bucket = state.aws.selectedBucket;
+    const bucket = state.selectedBucket;
     const url = `http://${bucket}/${file.name}`;
 
     // NB: pretty much just used to get content-type currently

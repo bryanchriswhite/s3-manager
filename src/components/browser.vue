@@ -54,24 +54,30 @@
             <ul class="labels">
               <li>File Name</li>
               <li>Public Url</li>
-              <li>Size</li>
               <li>Last Modified</li>
               <li>Content Type</li>
-              <li>Encoding</li>
+              <li>Size</li>
             </ul>
             <ul class="values">
               <li>{{selectedFile.name || '&nbsp;'}}</li>
               <li>{{selectedFile.url || '&nbsp;'}}</li>
-              <li>{{formatSize(selectedFile.size) || '&nbsp;'}}</li>
               <li>{{selectedFile.lastModified || '&nbsp;'}}</li>
               <li>{{selectedFile.contentType || '&nbsp;'}}</li>
-              <li v-bind:class="{i: !selectedFile.encoding}">
-                {{selectedFile.encoding || 'N/A'}}
-              </li>
+              <li>{{formatSize(selectedFile.size) || '&nbsp;'}}</li>
             </ul>
           </section>
-          <textarea name="embed-code" cols="30" rows="10"
-                    v-bind:value="embedCode"></textarea>
+          <textarea name="embed-code"
+                    v-bind:value="embedCode"
+                    v-on:click="selectEmbedCode"
+                    readonly
+          ></textarea>
+          <select name="embed-format"
+                  v-model="selectedEmbedFormat">
+            <option v-for="format in embedFormats"
+                    v-bind:value="format">
+              {{format.name}}
+            </option>
+          </select>
         </template>
         <template slot="bottom">
           <div class="img"
@@ -89,7 +95,7 @@
   import {mapState, mapMutations, mapActions} from 'vuex'
   import VerticalDivide from './vertical-divide.vue'
   import HorizontalDivide from './horizontal-divide.vue'
-  import {formatSize} from '../utils.js'
+  import {formatSize, embedFormats} from '../utils.js'
 
   export default {
     name: 'browser',
@@ -97,10 +103,28 @@
       ...mapState({
         buckets: state => state.aws.buckets,
         files: state => state.aws.files,
-        selectedBucket: state => state.aws.selectedBucket,
-        selectedFile: state => state.aws.selectedFile
+        embedFormats: state => state.embedFormats,
+        selectedBucket: state => state.selectedBucket,
+        selectedFile: state => state.selectedFile,
+        selectedEmbedFormat: state => state.selectedEmbedFormat,
+        embedCode: state => {
+          if (state.selectedEmbedFormat != null) {
+            return state.selectedEmbedFormat.template({
+              url: state.selectedFile.url
+            })
+          }
+
+          return '';
+        }
       }),
-      embedCode: () => 'WIP'
+      selectedEmbedFormat: {
+        get() {
+          return this.$store.state.selectedEmbedFormat;
+        },
+        set(format) {
+          this.$store.commit('updateEmbedFormat', format);
+        }
+      }
     },
     components: {
       VerticalDivide,
@@ -114,6 +138,9 @@
       ...mapActions([
         'selectFile'
       ]),
+      selectEmbedCode(event) {
+        event.target.setSelectionRange(0, event.target.value.length);
+      },
       handleContextmenu(event, context, item) {
         this.openContextMenu({
           x: event.clientX,
@@ -175,6 +202,10 @@
     display: flex;
     justify-content: center;
     margin-top: 2px;
+  }
+
+  #properties .metadata > textarea {
+    width: auto;
   }
 
   #properties .labels {

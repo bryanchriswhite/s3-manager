@@ -24,7 +24,7 @@ function buildS3Options(state) {
 }
 
 function formatSize(bytes) {
-  if (!bytes) return '';
+  if (bytes == null) return '';
 
   const formats = new function () {
     this.B = {unit: 'B', value: bytes};
@@ -43,9 +43,21 @@ function formatSize(bytes) {
     `${bytes}B`;
 }
 
+const embedFormats = [
+  {
+    name: 'UBBCode',
+    template: _.template('[url="<%= url %>"][img]<%= url %>[/img][/url]')
+  },
+  {
+    name: 'HTML',
+    template: _.template('<a href="<%= url %>" target="_blank"><img src="<%= url %>"/></a>')
+  }
+];
+
 export {
   parseValue,
   buildConfig,
   buildS3Options,
-  formatSize
+  formatSize,
+  embedFormats
 }
