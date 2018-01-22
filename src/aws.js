@@ -11,11 +11,12 @@ aws.loadConfig = () => {
   const configString = window.localStorage.getItem(CONFIG_STORAGE_KEY);
   let config = {
     credentials: {},
-    region: ''
+    region: '',
+    buckets: []
   };
 
   try {
-    if (configString) config = JSON.parse(configString);
+    if (configString) config = {...config, ...JSON.parse(configString)};
   } catch (err) {
     console.error('Unable to load AWS config from localstorage!');
   }

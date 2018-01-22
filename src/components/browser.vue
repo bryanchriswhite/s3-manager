@@ -14,10 +14,15 @@
             </thead>
             <tbody>
             <tr v-for="bucket in buckets"
-                v-bind:class="{selected: bucket == selectedBucket}"
+                v-bind:class="{selected: bucket === selectedBucket}"
+                v-on:click="selectBucket(bucket)"
                 v-on:contextmenu="handleContextmenu($event, 'bucket', bucket)">
               <td>{{bucket}}</td>
-              <td>{{files.length}}</td>
+              <td>
+                <span v-show="bucket === selectedBucket">
+                  {{files.length}}
+                </span>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -133,9 +138,10 @@
     methods: {
       formatSize,
       ...mapMutations([
-        'openContextMenu',
+        'openContextMenu'
       ]),
       ...mapActions([
+        'selectBucket',
         'selectFile'
       ]),
       selectEmbedCode(event) {

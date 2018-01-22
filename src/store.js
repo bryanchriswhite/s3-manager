@@ -6,8 +6,12 @@ import {buildConfig, buildS3Options, embedFormats} from './utils.js'
 
 Vue.use(Vuex);
 
-const {region: selectedRegion, credentials} = aws.loadConfig();
+const {region: selectedRegion, credentials, buckets} = aws.loadConfig();
 const initialState = {
+  selectedBucket: null,
+  selectedFile: {},
+  embedFormats,
+  selectedEmbedFormat: embedFormats[0],
   aws: {
     credentials,
     selectedRegion,
@@ -17,7 +21,7 @@ const initialState = {
       secretAccessKey: credentials.secretKey
     }),
     s3Regions: aws.s3Regions,
-    buckets: ['gpg.bryanchriswhite.com'],
+    buckets,
     files: [],
   },
   dividers: {
@@ -40,11 +44,7 @@ const initialState = {
     visible: false,
     context: null,
     item: null
-  },
-  selectedBucket: 'gpg.bryanchriswhite.com',
-  selectedFile: {},
-  embedFormats,
-  selectedEmbedFormat: embedFormats[0]
+  }
 };
 
 const mutations = {
@@ -78,8 +78,16 @@ const mutations = {
   closeContextMenu(state) {
     state.contextMenu.visible = false;
   },
+  updateBuckets(state, buckets) {
+    buckets = _.compact(buckets);
+    state.aws.buckets = buckets;
+    aws.saveConfig(buildConfig(state));
+  },
   updateFiles(state, payload) {
     state.aws.files = aws.parseFiles(payload);
+  },
+  selectBucket(state, bucket) {
+    state.selectedBucket = bucket;
   },
   selectFile(state, payload) {
     state.selectedFile = aws.parseFile(payload);
@@ -91,6 +99,13 @@ const mutations = {
 
 const actions = {
   refreshBuckets({commit, dispatch, state}) {
+    // NB: type coercion is intentional
+    if (state.selectedBucket == null) {
+      if (state.aws.buckets.length <= 0) return;
+
+      commit('selectBucket', state.aws.buckets[0]);
+    }
+
     dispatch('refreshFiles', state.selectedBucket);
     /*
      * CORS isn't supported for the `listBuckets` operation - FML
@@ -108,6 +123,10 @@ const actions = {
 
       commit('updateFiles', data)
     });
+  },
+  selectBucket({commit, dispatch}, bucket) {
+    commit('selectBucket', bucket);
+    dispatch('refreshFiles', bucket);
   },
   selectFile({commit, state}, file) {
     // const url = state.aws.s3.getSignedUrl('getObject', {

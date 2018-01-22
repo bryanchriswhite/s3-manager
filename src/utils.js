@@ -11,7 +11,8 @@ function parseValue(string) {
 function buildConfig(state) {
   return {
     credentials: state.aws.credentials,
-    region: state.aws.selectedRegion
+    region: state.aws.selectedRegion,
+    buckets: state.aws.buckets
   };
 }
 
@@ -19,11 +20,13 @@ function buildS3Options(state) {
   return {
     region: state.aws.region,
     accessKeyId: state.aws.credentials.keyId,
-    secretAccessKey: state.aws.credentials.secretKey
+    secretAccessKey: state.aws.credentials.secretKey,
+    buckets: state.aws.buckets
   };
 }
 
 function formatSize(bytes) {
+  // NB: type coercion is intentional
   if (bytes == null) return '';
 
   const formats = new function () {

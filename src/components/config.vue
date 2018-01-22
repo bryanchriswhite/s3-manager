@@ -1,20 +1,23 @@
 <template>
   <form id="config">
-      <select name="region"
-              v-model="selectedRegion">
-        <option v-for="region in regions"
-                v-bind:value="region.region">
-          {{region.name}}
-        </option>
-      </select>
-      <input type="text"
-             name="key-id"
-             placeholder="Secret Key Id"
-             v-model="keyId"/>
-      <input type="password"
-             name="secret-key"
-             placeholder="Access Secret Key"
-             v-model="secretKey"/>
+    <select name="region"
+            v-model="selectedRegion">
+      <option v-for="region in regions"
+              v-bind:value="region.region">
+        {{region.name}}
+      </option>
+    </select>
+    <input type="text"
+           name="key-id"
+           placeholder="Secret Key Id"
+           v-model="keyId"/>
+    <input type="password"
+           name="secret-key"
+           placeholder="Access Secret Key"
+           v-model="secretKey"/>
+    <textarea name="buckets"
+              placeholder="Buckets (one per line)"
+              v-model="buckets"></textarea>
   </form>
 </template>
 
@@ -53,6 +56,20 @@
           this.$store.commit('updateCredentials', {
             secretKey
           });
+        }
+      },
+      buckets: {
+        get() {
+          const bucketsArray = this.$store.state.aws.buckets;
+          return bucketsArray.reduce((bucketsString, bucket) => {
+            if (bucketsString === '') return bucket;
+
+            return `${bucketsString}\n${bucket}`;
+          }, '')
+        },
+        set(bucketsString) {
+          const buckets = bucketsString.split('\n');
+          this.$store.commit('updateBuckets', buckets);
         }
       }
     }
