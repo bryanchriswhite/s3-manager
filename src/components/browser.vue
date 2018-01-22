@@ -78,7 +78,7 @@
           </section>
           <textarea name="embed-code"
                     v-bind:value="embedCode"
-                    v-on:click="selectEmbedCode"
+                    v-on:click="selectTextArea"
                     readonly
           ></textarea>
           <select name="embed-format"
@@ -149,7 +149,7 @@
         'selectBucket',
         'selectFile'
       ]),
-      selectEmbedCode(event) {
+      selectTextArea(event) {
         event.target.setSelectionRange(0, event.target.value.length);
       },
       handleContextmenu(event, context, item) {
