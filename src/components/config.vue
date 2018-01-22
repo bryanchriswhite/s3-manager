@@ -12,7 +12,7 @@
     </select>
     <input type="text"
            name="key-id"
-           placeholder="Secret Key Id"
+           placeholder="Access Key Id"
            v-model="keyId"/>
     <input type="password"
            name="secret-key"
@@ -144,7 +144,7 @@
           const d = new Date();
           return `
 {
-  "Version": "${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}",
+  "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
