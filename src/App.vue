@@ -2,7 +2,7 @@
   <div id="app">
     <Navigation></Navigation>
     <section id="content">
-      <transition name="fade">
+      <transition name="fade-in">
         <router-view></router-view>
       </transition>
       <ContextMenu></ContextMenu>
@@ -66,11 +66,16 @@
     flex-direction: column;
   }
 
-  .fade-enter-active, .fade-leave-active {
+  .fade-in-out-enter-active,
+  .fade-in-enter-active,
+  .fade-in-out-leave-active {
     transition: opacity 500ms;
   }
 
-  .fade-enter, .fade-leave-to {
+  .fade-in-out-enter,
+  .fade-in-enter,
+  .fade-in-out-leave-to,
+  .fade-in-leave-to {
     opacity: 0;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="fade-in-out">
     <div id="context-menu"
          v-show="visible"
          v-on:blur="closeContextMenu"
