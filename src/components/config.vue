@@ -2,7 +2,8 @@
   <section id="config">
     <select name="region"
             v-model="selectedRegion">
-      <option value="" disabled selected hidden>
+      <option v-show="selectedRegion == null"
+        value="" disabled selected hidden>
         Select a region
       </option>
       <option v-for="region in regions"
