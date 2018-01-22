@@ -65,7 +65,12 @@
             </ul>
             <ul class="values">
               <li>{{selectedFile.name || '&nbsp;'}}</li>
-              <li>{{selectedFile.url || '&nbsp;'}}</li>
+              <li>
+                <a target="_blank"
+                   v-bind:href="selectedFile.url">
+                  {{selectedFile.url || '&nbsp;'}}
+                </a>
+              </li>
               <li>{{selectedFile.lastModified || '&nbsp;'}}</li>
               <li>{{selectedFile.contentType || '&nbsp;'}}</li>
               <li>{{formatSize(selectedFile.size) || '&nbsp;'}}</li>
