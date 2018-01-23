@@ -1,11 +1,12 @@
-var path = require('path')
-var webpack = require('webpack')
+const {resolve} = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    path: resolve('dist'),
+    publicPath: '/',
     filename: 'build.js'
   },
   watchOptions: {
@@ -14,6 +15,10 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
+      },
       {
         test: /\.css$/,
         use: [
@@ -52,16 +57,27 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    contentBase: resolve('./dist'),
+    publicPath: '/'
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 's3manager',
+      filename: resolve('dist', 'index.html'),
+      template: resolve('src', 'index.html'),
+      inject: true,
+      hash: true
+    })
+  ],
   performance: {
     hints: false
   },
   devtool: '#eval-source-map'
-}
+};
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
+  module.exports.devtool = '#source-map';
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
