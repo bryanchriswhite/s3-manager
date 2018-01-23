@@ -12,7 +12,6 @@ const s3PluginOptions = {
   s3UploadOptions: {
     Bucket: process.env.AWS_BUCKET
   },
-  // htmlFiles: 'index.html',
   progress: true
 };
 
