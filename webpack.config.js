@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: resolve('dist'),
     publicPath: '/',
-    filename: 'build.js'
+    filename: 'build-[hash].js'
   },
   watchOptions: {
     aggregateTimeout: 300,
@@ -66,8 +66,7 @@ module.exports = {
       title: 's3manager',
       filename: resolve('dist', 'index.html'),
       template: resolve('src', 'index.html'),
-      inject: true,
-      hash: true
+      inject: true
     })
   ],
   performance: {
